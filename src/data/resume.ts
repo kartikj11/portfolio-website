@@ -447,3 +447,30 @@ export const heroStats: HeroStat[] = [
     source: "profiled. optimized. shipped.",
   },
 ];
+
+export type ThenVsNow = {
+  then: { period: string; paragraph: string };
+  now: { period: string; paragraph: string };
+  tieBreaker: string;
+};
+
+/**
+ * Content for the "Then vs. Now" section — first-person reflection on the
+ * shift from product-surface engineering to platform-infrastructure work.
+ * Not a career-ladder story; a taste-shift story. Copy is locked; edits
+ * here should match the approved paragraphs in the Phase 0 summary.
+ */
+export const thenVsNow: ThenVsNow = {
+  then: {
+    period: "2023",
+    paragraph:
+      "For a year and a half, the work was features. A MudBlazor dashboard at Wise Work that gave enterprise clients a read on their cloud databases. A regulatory-reporting backend for PwC on .NET 8 and Azure DB. Early ChatGPT API wiring into internal tools. Product-shaped code, shipped to product-shaped users.",
+  },
+  now: {
+    period: "2025",
+    paragraph:
+      "Now the work is one layer below. The developer platforms, the pipelines that move code from branch to production, the cloud estate the product actually sits on. Infrastructure-as-code, CI/CD, telemetry — what actually interests me, it turns out, is the engineering no one has to think about once it's running.",
+  },
+  tieBreaker:
+    "Turns out I'd rather ship the substrate than ship features on top of it.",
+};
