@@ -474,3 +474,69 @@ export const thenVsNow: ThenVsNow = {
   tieBreaker:
     "Turns out I'd rather ship the substrate than ship features on top of it.",
 };
+
+// --- FAQ -----------------------------------------------------------------
+
+export type FAQItem = { q: string; a: string };
+
+/**
+ * Two questions only. Answers are 2–3 sentences, first-person, same voice
+ * as the Then vs. Now narratives. Copy locked.
+ */
+export const faq: FAQItem[] = [
+  {
+    q: "Available for freelance or contract work?",
+    a: "Yes, but in small windows — nights and weekends only.",
+  },
+  {
+    q: "Based in Bangalore — is remote work OK?",
+    a: "Bangalore, IST — and distributed teams are what the work has always been.",
+  },
+];
+
+// --- Contact -------------------------------------------------------------
+
+export type ContactLink = { href: string; display: string };
+export type Contact = {
+  introLine: string;
+  email: ContactLink;
+  linkedin: ContactLink;
+  github: ContactLink;
+};
+
+/**
+ * The one place `--color-accent` earns its keep on this site — the three
+ * destination links below get accent on hover and focus-visible. Intro
+ * line is the site's most direct moment; copy is locked.
+ */
+export const contact: Contact = {
+  introLine: "I check all three. Email gets the fastest reply.",
+  email: {
+    href: "mailto:Jkartik156@gmail.com",
+    display: "Jkartik156@gmail.com",
+  },
+  linkedin: {
+    href: "https://www.linkedin.com/in/kartik-jindal-723113206/",
+    display: "/in/kartik-jindal-723113206",
+  },
+  github: {
+    href: "https://github.com/kartikj11",
+    display: "/kartikj11",
+  },
+};
+
+// --- Footer --------------------------------------------------------------
+
+export type FooterData = { name: string; location: string; year: number };
+
+/**
+ * Year resolved at module-eval time (build time under Next.js static
+ * generation). If a year-boundary rebuild is missed, the footer goes
+ * stale until the next deploy. Acceptable tradeoff vs. shipping a client
+ * component + hydration flicker for one footer line.
+ */
+export const footerData: FooterData = {
+  name: "Kartik Jindal",
+  location: "Bangalore",
+  year: new Date().getFullYear(),
+};

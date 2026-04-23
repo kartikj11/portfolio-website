@@ -3,8 +3,25 @@
 import type { ElementType, ReactNode } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 
-type ContainerTag = "div" | "section" | "header" | "footer" | "article";
-type ItemTag = "div" | "p" | "h1" | "h2" | "h3" | "span" | "li";
+type ContainerTag =
+  | "div"
+  | "section"
+  | "header"
+  | "footer"
+  | "article"
+  | "ul"
+  | "ol"
+  | "dl";
+type ItemTag =
+  | "div"
+  | "p"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "span"
+  | "li"
+  | "dt"
+  | "dd";
 
 type Trigger = "mount" | "inView";
 
