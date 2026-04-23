@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "@/lib/useReducedMotion";
 import { useLenis } from "@/components/motion/LenisProvider";
 import { navItems } from "@/data/resume";
 
@@ -113,21 +113,37 @@ export function StickyNav() {
   }, [menuOpen]);
 
   // ---- Navigation handler: Lenis smooth-scroll, fallback to native -------
+  // Defers scrollTo with double-rAF so that when the mobile overlay was
+  // open, React has committed menuOpen=false AND the scroll-lock cleanup
+  // effect has run (lenis.start(), main.inert = false, body overflow
+  // restored) before the scroll fires. Without the defer, scrollTo would
+  // hit a stopped Lenis instance and get silently dropped — reported bug.
+  // Desktop pays the same one-frame latency; imperceptible, cleaner than
+  // branching on menuOpen.
   const handleNavClick = useCallback(
     (anchorId: string) => {
       setMenuOpen(false);
       const target = document.getElementById(anchorId);
       if (!target) return;
 
-      const navHeight = navRef.current?.offsetHeight ?? 56;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const navHeight = navRef.current?.offsetHeight ?? 56;
 
-      if (lenis && !prefersReduced) {
-        lenis.scrollTo(target, { offset: -navHeight });
-      } else {
-        // Reduced-motion or Lenis not ready: instant jump via native API.
-        const top = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: top - navHeight, behavior: "auto" });
-      }
+          if (lenis && !prefersReduced) {
+            lenis.scrollTo(target, { offset: -navHeight });
+          } else {
+            // Reduced-motion or Lenis not ready: instant jump via native.
+            const top = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: top - navHeight, behavior: "auto" });
+          }
+
+          // Deep link: update URL hash so refresh / back-button works.
+          // Using pushState keeps the scroll animation smooth (location.hash
+          // assignment would trigger a native jump that fights Lenis).
+          history.pushState(null, "", `#${anchorId}`);
+        });
+      });
     },
     [lenis, prefersReduced]
   );
@@ -214,13 +230,17 @@ export function StickyNav() {
 
       {/* Mobile overlay — full-screen, role=dialog for screen readers.
           Rendered always for consistent hydration; visibility controlled
-          by opacity + pointer-events so the fade can be CSS-only. */}
+          by opacity + pointer-events so the fade can be CSS-only. When
+          closed, `inert` removes the overlay and all its focusable links
+          from both the accessibility tree AND the tab order — the modern
+          spec-correct replacement for aria-hidden, supported by all
+          evergreen browsers since 2023. */}
       <div
         id="mobile-nav-overlay"
         role="dialog"
         aria-modal="true"
         aria-labelledby="mobile-nav-heading"
-        aria-hidden={!menuOpen}
+        inert={!menuOpen}
         onClick={(e) => {
           // Clicking the backdrop (but not an item) closes the overlay.
           if (e.target === e.currentTarget) setMenuOpen(false);

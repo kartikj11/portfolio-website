@@ -4,9 +4,9 @@
   --color-ink: #131211;
   --color-paper: #f5f1ea;
   --color-paper-2: #ebe5da;
-  --color-accent: #d64933;
+  --color-accent: #b83a25;
   --color-accent-2: #2b4c3f;
-  --color-mute: #8a857d;
+  --color-mute: #6b655c;
 
   --font-display: var(--font-display-raw), "Fraunces", "Times New Roman", serif;
   --font-serif: var(--font-serif-raw), "Instrument Serif", "Times New Roman",
@@ -35,4 +35,47 @@ body {
 ::selection {
   background-color: var(--color-ink);
   color: var(--color-paper);
+}
+
+/* ----------------------------------------------------------------------
+ * Reveal primitive — CSS-driven, framer-motion-free.
+ *
+ * Only the inView path emits any reveal attributes: above-the-fold
+ * (mount-triggered) Reveals are a JSX passthrough so Chrome's LCP
+ * algorithm sees the Hero h1 at opacity:1 at paint-zero. See
+ * Reveal.tsx for the rationale.
+ *
+ * <Reveal trigger="inView"> sets data-reveal + data-trigger="inView"
+ * and toggles data-revealed="true" once in-view. <RevealItem> sets
+ * data-reveal-item and writes --reveal-index as an inline style.
+ * Stagger and delay live on the Reveal root. The descendant selector
+ * (no `>`) matches RevealItems nested inside layout wrappers — common
+ * across the site.
+ * ---------------------------------------------------------------------- */
+[data-reveal][data-trigger="inView"] [data-reveal-item] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(
+    var(--reveal-delay, 0s) + var(--reveal-index, 0) * var(--reveal-stagger, 0s)
+  );
+  will-change: opacity, transform;
+}
+
+[data-reveal][data-trigger="inView"][data-revealed="true"] [data-reveal-item] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal][data-trigger="inView"] [data-reveal-item] {
+    transform: none;
+    transition: opacity 350ms linear;
+    transition-delay: 0s;
+  }
+  [data-reveal][data-trigger="inView"][data-revealed="true"] [data-reveal-item] {
+    transform: none;
+  }
 }

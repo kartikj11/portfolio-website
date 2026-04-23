@@ -45,19 +45,18 @@ export function Hero() {
             <span>Kartik Jindal — DevOps / Cloud Infra</span>
           </RevealItem>
 
-          <RevealItem as="h1">
-            <span
-              id="hero-headline"
-              className="mt-10 block font-display text-[clamp(2.75rem,9vw,9rem)] font-normal leading-[0.95] tracking-[-0.02em] text-ink sm:mt-14 lg:mt-16"
-            >
-              I build cloud infrastructure
-              <br className="hidden sm:block" />{" "}
-              <span className="font-serif italic tracking-[-0.01em]">
-                that doesn&rsquo;t wake people up
-              </span>{" "}
-              <span className="font-serif italic tracking-[-0.01em]">
-                at 3am.
-              </span>
+          <RevealItem
+            as="h1"
+            id="hero-headline"
+            className="mt-10 block font-display text-[clamp(2.75rem,9vw,9rem)] font-normal leading-[0.95] tracking-[-0.02em] text-ink sm:mt-14 lg:mt-16"
+          >
+            I build cloud infrastructure
+            <br className="hidden sm:block" />{" "}
+            <span className="font-serif italic tracking-[-0.01em]">
+              that doesn&rsquo;t wake people up
+            </span>{" "}
+            <span className="font-serif italic tracking-[-0.01em]">
+              at 3am.
             </span>
           </RevealItem>
 

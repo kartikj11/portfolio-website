@@ -38,10 +38,32 @@ const geistMono = Geist_Mono({
   variable: "--font-mono-raw",
 });
 
+// PLACEHOLDER: Replace with the production domain at deploy time.
+// metadataBase lets Next.js resolve relative URLs in openGraph/twitter
+// metadata; if the site deploys somewhere other than kartikjindal.dev,
+// update this one constant and every URL downstream re-resolves.
+const SITE_URL = "https://kartikjindal.dev";
+const SITE_TITLE = "Kartik Jindal — DevOps / Cloud Infrastructure";
+const SITE_DESCRIPTION =
+  "Cloud infrastructure that doesn't wake people up at 3am.";
+
 export const metadata: Metadata = {
-  title: "Kartik Jindal — DevOps / Cloud Infrastructure",
-  description:
-    "Portfolio of Kartik Jindal. Cloud infrastructure that doesn't wake people up at 3am.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Kartik Jindal",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
@@ -55,6 +77,17 @@ export default function RootLayout({
       className={`${fraunces.variable} ${instrumentSerif.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
+        {/*
+          Skip-to-content link — visually hidden until focused by keyboard.
+          First focusable element on the page; lets keyboard users bypass
+          the sticky nav (once it's visible) and jump straight to the Hero.
+        */}
+        <a
+          href="#hero"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[100] focus:border focus:border-ink focus:bg-paper focus:px-3 focus:py-2 focus:font-mono focus:text-sm focus:text-ink"
+        >
+          Skip to content
+        </a>
         <LenisProvider>
           {/*
             StickyNav lives as a sibling of <main> so the mobile overlay
