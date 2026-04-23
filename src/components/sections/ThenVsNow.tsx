@@ -4,7 +4,7 @@ import { thenVsNow } from "@/data/resume";
 export function ThenVsNow() {
   return (
     <section
-      id="then-vs-now"
+      id="then-now"
       aria-labelledby="then-vs-now-heading"
       className="relative px-6 pb-28 pt-0 sm:px-10 sm:pb-32 sm:pt-2 lg:px-16 lg:pb-40 lg:pt-4"
     >

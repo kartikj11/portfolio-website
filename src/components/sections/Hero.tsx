@@ -6,7 +6,7 @@ export function Hero() {
 
   return (
     <section
-      id="top"
+      id="hero"
       aria-labelledby="hero-headline"
       className="relative isolate flex min-h-dvh flex-col justify-between px-6 pb-10 pt-16 sm:px-10 sm:pb-14 sm:pt-20 lg:px-16 lg:pb-20 lg:pt-28"
     >

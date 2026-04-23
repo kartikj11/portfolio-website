@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
 import { LenisProvider } from "@/components/motion/LenisProvider";
+import { StickyNav } from "@/components/nav/StickyNav";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -54,7 +55,15 @@ export default function RootLayout({
       className={`${fraunces.variable} ${instrumentSerif.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
-        <LenisProvider>{children}</LenisProvider>
+        <LenisProvider>
+          {/*
+            StickyNav lives as a sibling of <main> so the mobile overlay
+            can toggle `inert` on <main> without affecting itself. <main>
+            is the landmark for all page content; the nav is chrome.
+          */}
+          <StickyNav />
+          <main className="flex-1">{children}</main>
+        </LenisProvider>
       </body>
     </html>
   );

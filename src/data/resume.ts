@@ -540,3 +540,27 @@ export const footerData: FooterData = {
   location: "Bangalore",
   year: new Date().getFullYear(),
 };
+
+// --- Sticky nav ----------------------------------------------------------
+
+export type NavItem = {
+  number: string;
+  label: string;
+  /** The `id` attribute on the target section, without `#`. */
+  anchorId: string;
+};
+
+/**
+ * Sticky anchor nav items. Numbers are two-digit zero-padded, matching
+ * the on-page eyebrow format. Labels preserve site vocabulary — "Build
+ * Log" not "Log", "Then vs. Now" not "Then / Now".
+ */
+export const navItems: NavItem[] = [
+  { number: "01", label: "Index", anchorId: "hero" },
+  { number: "02", label: "Build Log", anchorId: "build-log" },
+  { number: "03", label: "Builds", anchorId: "selected-builds" },
+  { number: "04", label: "Stack", anchorId: "stack" },
+  { number: "05", label: "Then vs. Now", anchorId: "then-now" },
+  { number: "06", label: "FAQ", anchorId: "faq" },
+  { number: "07", label: "Contact", anchorId: "contact" },
+];
