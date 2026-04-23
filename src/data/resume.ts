@@ -32,6 +32,12 @@ export type Experience = {
   startYear: number;
   endYear: number | "Present";
   bullets: string[];
+  /**
+   * Editorial prose rewrite of the role, authored for the site.
+   * Each string is one paragraph. Content is grounded in `bullets`
+   * and MASTER_RESUME.md — no invented metrics, systems, or dates.
+   */
+  narrative: string[];
 };
 
 export type Project = {
@@ -100,6 +106,11 @@ export const experience: Experience[] = [
       "Developed **audit automation tools for Just-In-Time (JIT) access** on GitHub, strengthening access governance and reducing manual audit overhead.",
       "Built a **telemetry service for golden signals** on GitHub instances using **Telegraf** and **Starlark**, enabling real-time observability of latency, traffic, errors, and saturation metrics.",
     ],
+    narrative: [
+      "My day job is keeping the developer platform boring — GitHub Enterprise, JFrog Enterprise, and Jenkins Enterprise, the boxes every engineer at the company quietly depends on. Cloud infrastructure is shaped with AWS CloudFormation; the codebase around it is being pulled into SOX and enterprise-compliance posture, which mostly means tightening logging and making audit trails something an auditor can actually read.",
+      "The load-reduction work on GitHub Enterprise started as a profiling exercise. Three months of watching traffic, isolating the top consumers, and walking specific teams through targeted optimizations — not a rewrite, a conversation. The 120K requests an hour that stopped hitting the platform did so because the callers changed, not because the platform did.",
+      "Around that, a few smaller systems. A telemetry service for the golden signals on GitHub instances, written against Telegraf with Starlark for the shaping logic, so latency, traffic, errors, and saturation become something a dashboard can answer for. StackStorm workflows for the operational edges — the steps an on-call would otherwise run by hand. And an audit tool for Just-In-Time access on GitHub, built so access reviews stop being a manual spreadsheet exercise.",
+    ],
   },
   {
     id: "celebal",
@@ -119,6 +130,10 @@ export const experience: Experience[] = [
       "Specialised in the **security and networking aspects of infrastructure**, investigating Azure's data storage, **Azure Monitor, Log Analytics, Diagnostic settings**, and troubleshooting methods.",
       'Mastered **Terraform Automation** to design complex architectures, such as **"Avanos,"** which included **secure site-to-site connections** to datacenters, integration with **Azure Data Factory, Data Lake, Synapse**, and end-to-end data visualization in **PowerBI**. Achieved full data privacy through the use of **Azure Private Endpoints and Private DNS Zones**.',
     ],
+    narrative: [
+      "A year on the Azure side of the fence, mostly writing Terraform for clients who needed their infrastructure to be repeatable before it could be anything else. Modular Terraform as the substrate; multi-stage Azure DevOps pipelines on top — environment-specific variables, approval gates, compliance checks wired into the same definition that did the deploy. Kubernetes workloads ran on AKS, packaged with Helm, fronted by Nginx ingress.",
+      "The architecture I spent the most time on was an engagement called Avanos — a private data estate stitched across site-to-site links from Azure back into the customer's datacenters, then through Data Factory, Data Lake, and Synapse, ending in PowerBI. Every hop was designed to never leave private space: Private Endpoints and Private DNS Zones carried the traffic. The Hub-and-Spoke work, the APIM-fronted RAG chatbot over Azure AI Search, the WAF and firewall posture — all of it came from the same instinct, which is that security and networking aren't a late-stage concern, they're the shape of the diagram.",
+    ],
   },
   {
     id: "wise-work",
@@ -132,6 +147,10 @@ export const experience: Experience[] = [
       "Developed an infrastructure-focused **MudBlazor** project aimed at visualising, evaluating, and managing cloud databases for enterprise clients. Integrated **advanced predictive analytics algorithms** to proactively identify and mitigate potential issues, ensuring smooth operations and minimal downtime.",
       "Built and integrated a back-end system for **PwC's regulatory repository and ad-hoc reporting platform**, leveraging **Azure DB** and **.NET 8** to enable advanced filtering, seamless front-end integration, and improved data management.",
       "Spearheaded **ChatGPT API** model creation, enhancing the function of internal servers and document management systems.",
+    ],
+    narrative: [
+      "First real engineering job, sitting between the application and the database, learning what production actually asks of you. The largest piece was a MudBlazor tool that gave enterprise clients a view into their cloud databases — inventory, health, the usual — plus a predictive layer meant to catch problems before an on-call did.",
+      "The rest of the time went to a regulatory-repository and ad-hoc reporting backend for a PwC engagement, built on Azure DB and .NET 8, and some early work wiring ChatGPT's API into internal servers and document systems back when that still felt unfamiliar.",
     ],
   },
 ];

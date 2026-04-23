@@ -65,16 +65,17 @@ export function Hero() {
             className="mt-10 max-w-[46ch] font-sans text-lg leading-[1.55] text-ink sm:mt-12 sm:text-xl"
           >
             DevOps engineer at Intuit, shipping from{" "}
-            <span className="whitespace-nowrap">{profile.location.split(",")[0]}</span>.
-            Quiet systems, loud receipts.
+            <span className="whitespace-nowrap">
+              {profile.location.split(",")[0]}
+            </span>
+            .
           </RevealItem>
         </div>
 
-        {/* Stats column — sits below copy on mobile/tablet, floats right on desktop */}
-        <RevealItem
-          as="div"
-          className="lg:col-span-4 lg:mt-[calc(2.5rem+0.2em)] lg:pl-2"
-        >
+        {/* Stats column — below copy on mobile/tablet; on desktop, a fixed
+            top offset anchors the first stat near the top of the headline's
+            body rather than tying the offset to the clamped headline size. */}
+        <RevealItem as="div" className="lg:col-span-4 lg:mt-20 lg:pl-2">
           <dl className="flex flex-col gap-10 sm:flex-row sm:gap-12 lg:flex-col lg:gap-12">
             <StatCard stat={primaryStat} />
             <StatCard stat={secondaryStat} />
