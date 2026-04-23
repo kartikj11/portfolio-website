@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Fraunces, Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
 import { LenisProvider } from "@/components/motion/LenisProvider";
 import { StickyNav } from "@/components/nav/StickyNav";
+import { profile } from "@/data/resume";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -38,15 +40,6 @@ const geistMono = Geist_Mono({
   variable: "--font-mono-raw",
 });
 
-// PLACEHOLDER: Replace with the production domain at deploy time.
-// metadataBase lets Next.js resolve relative URLs in openGraph/twitter
-// metadata; if the site deploys somewhere other than kartikjindal.dev,
-// update this one constant and every URL downstream re-resolves.
-const SITE_URL = "https://kartikjindal.dev";
-const SITE_TITLE = "Kartik Jindal — DevOps / Cloud Infrastructure";
-const SITE_DESCRIPTION =
-  "Cloud infrastructure that doesn't wake people up at 3am.";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
@@ -66,6 +59,23 @@ export const metadata: Metadata = {
   },
 };
 
+// JSON-LD Person schema. Surfaces in Google knowledge panels and lets
+// LLM-driven search aggregators cite the right role/employer without
+// having to scrape prose. `sameAs` is read from `profile.links` in the
+// resume data so social URLs stay authoritative in one place.
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: "DevOps Engineer",
+  worksFor: {
+    "@type": "Organization",
+    name: "Intuit",
+  },
+  url: SITE_URL,
+  sameAs: [profile.links.linkedin, profile.links.github],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -77,6 +87,17 @@ export default function RootLayout({
       className={`${fraunces.variable} ${instrumentSerif.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
+        <script
+          type="application/ld+json"
+          // JSON.stringify output is safe to inline here — profile data
+          // is static and contains no user input. suppressHydrationWarning
+          // avoids React's warning about inner HTML mismatches since the
+          // script contents never change between server and client.
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personJsonLd),
+          }}
+        />
         {/*
           Skip-to-content link — visually hidden until focused by keyboard.
           First focusable element on the page; lets keyboard users bypass
