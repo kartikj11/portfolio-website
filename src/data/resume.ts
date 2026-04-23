@@ -53,6 +53,13 @@ export type Achievement = {
   description: string;
 };
 
+export type HeroStat = {
+  id: string;
+  value: string;
+  label: string;
+  source: string;
+};
+
 export const profile: Profile = {
   name: "Kartik Jindal",
   location: "Bangalore, India",
@@ -322,5 +329,20 @@ export const achievements: Achievement[] = [
     title: "Excellence Scholarship",
     description:
       "Awarded by SRM Institute of Science and Technology to students who have performed outstandingly in academia.",
+  },
+];
+
+export const heroStats: HeroStat[] = [
+  {
+    id: "github-load",
+    value: "15.5%",
+    label: "GitHub Enterprise load, reduced",
+    source: "Intuit · 3 months",
+  },
+  {
+    id: "github-rph",
+    value: "~120K",
+    label: "requests per hour, saved",
+    source: "profiled. optimized. shipped.",
   },
 ];
