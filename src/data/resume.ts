@@ -399,6 +399,32 @@ export const projects: Project[] = [
   },
 ];
 
+/**
+ * The 16 items the Marquee renders. Each entry is something already named
+ * by the site — Hero metadata, Build Log prose, or Selected Builds stacks —
+ * not everything on the resume. Ordering is intentional: IaC → runtime →
+ * automation → DevTools platforms → CI/CD → Azure → data → observability →
+ * scripting. The loop carries a narrative even though it's infinite.
+ */
+export const featuredSkills: string[] = [
+  "Terraform",
+  "AWS CloudFormation",
+  "Kubernetes",
+  "Helm",
+  "StackStorm",
+  "GitHub Enterprise",
+  "JFrog",
+  "Jenkins",
+  "Azure DevOps",
+  "Azure Data Factory",
+  "Azure Key Vault",
+  "Azure",
+  "MongoDB",
+  "Telegraf",
+  "Starlark",
+  "PowerShell",
+];
+
 export const achievements: Achievement[] = [
   {
     title: "Excellence Scholarship",
