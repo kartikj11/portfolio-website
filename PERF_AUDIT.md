@@ -219,6 +219,50 @@ Small. Not a primary concern.
 
 _Populated after fixes + §5 three-run median Lighthouse capture._
 
+## Pre-deploy baseline (2026-04-24)
+
+Recorded immediately before Vercel import. Fixes §3.1, §3.2 (incl. §3.2.1/§3.2.2 squash), and deploy-hardening commits (Node pin, security headers, SEO routes, Vercel observability) are all landed on `main`. §3.3 (fonts) is deferred — Speed Insights real-user data will decide whether it becomes a follow-up.
+
+### Local Lighthouse (three-run median, simulated Slow 4G on mobile)
+
+| Category       | Mobile | Desktop |
+| -------------- | -----: | ------: |
+| Performance    |     93 |     100 |
+| Accessibility  |    100 |     100 |
+| Best Practices |    100 |     100 |
+| SEO            |    100 |     100 |
+
+LCP candidate: Hero h1 ("I build cloud infrastructure…"), firing close to FCP since nothing gates it anymore.
+
+### Top 10 JS chunks by gzipped size
+
+| Chunk                          |  Raw |   Gzipped |
+| ------------------------------ | ---: | --------: |
+| `0wk28bjyhvkb7.js`              | 863 KB | 226.7 KB | (three/R3F, lazy, desktop-only)
+| `0v3lyuj75aq50.js`              | 222 KB |  69.2 KB | (root, React + app)
+| `03~yq9q893hmn.js`              | 110 KB |  38.5 KB | (polyfills)
+| `0gan1gblmcg1~.js`              | 140 KB |  37.5 KB | (root, Next runtime)
+| `01qk2~bgf76vu.js`              |  57 KB |  13.4 KB | (Next client nav utilities)
+| `0772eqs_yymvl.js`              |  51 KB |  10.6 KB |
+| `0jmz6qanafdva.js`              |  30 KB |   8.9 KB |
+| `0x_unro5r05.t.js`              |  22 KB |   7.4 KB | (root)
+| `0y7.4~ac0v34s.js`              |  12 KB |   5.3 KB |
+| `turbopack-0ozo1u-fra1p2.js`    |  10 KB |   4.1 KB | (root, Turbopack runtime)
+
+### Initial-load totals
+
+- **rootMainFiles total gzipped:** 128.7 KB
+- **CSS (one file):** 6.0 KB gzipped
+- **Polyfills (separate):** 38.5 KB gzipped
+- **Total initial payload:** ~173 KB gzipped (JS + CSS + polyfills)
+- **Lazy three chunk:** 226.7 KB gzipped — loaded only on desktop + full-motion users thanks to the matchMedia gate from Fix §3.1.
+
+### Regression guard
+
+If a future change drops mobile Performance below 90, revert or fix before merging. The numbers above are the reference.
+
+**Ready for Vercel import.**
+
 ## Remaining
 
 _Populated at end of pass._
