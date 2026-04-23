@@ -1,7 +1,16 @@
 "use client";
 
-import type { ElementType, ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+
+/**
+ * Motion-proxy components accept any prop shape. TypeScript narrows
+ * `motion[as]` too aggressively once R3F's JSX namespace augmentations
+ * are in the compilation unit, collapsing some prop types to `never`.
+ * We cast the result to a permissive component type to escape the
+ * narrowing. No runtime cost — pure types.
+ */
+type AnyMotionComponent = ComponentType<Record<string, unknown>>;
 
 type ContainerTag =
   | "div"
@@ -74,7 +83,7 @@ export function Reveal({
 
   // framer-motion types motion[tag] as a valid component, but TS can't
   // narrow the union cleanly — cast once at the boundary.
-  const Component = motion[as] as ElementType;
+  const Component = motion[as] as unknown as AnyMotionComponent;
 
   const animationProps =
     trigger === "inView"
@@ -120,7 +129,7 @@ export function RevealItem({
         },
       };
 
-  const Component = motion[as] as ElementType;
+  const Component = motion[as] as unknown as AnyMotionComponent;
 
   return (
     <Component variants={item} className={className}>

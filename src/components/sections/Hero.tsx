@@ -1,4 +1,5 @@
 import { Reveal, RevealItem } from "@/components/motion/Reveal";
+import { HeroMeshSlot } from "@/components/three/HeroMeshSlot";
 import { heroStats, profile } from "@/data/resume";
 
 export function Hero() {
@@ -10,15 +11,15 @@ export function Hero() {
       aria-labelledby="hero-headline"
       className="relative isolate flex min-h-dvh flex-col justify-between px-6 pb-10 pt-16 sm:px-10 sm:pb-14 sm:pt-20 lg:px-16 lg:pb-20 lg:pt-28"
     >
-      {/* HeroMesh slot — Step 10 drops the R3F <Canvas> in here.
-          Kept aria-hidden and empty today so the hero still reads as finished.
-          Desktop-only: the mesh never shows on phone/tablet (perf + layout). */}
+      {/* HeroMesh slot — desktop-only R3F mesh (with SVG fallback for
+          reduced-motion, loading, and error states). Hidden below lg so
+          the mesh never renders on phone/tablet (perf + layout). */}
       <div
         aria-hidden
         data-hero-mesh-slot
         className="pointer-events-none absolute inset-y-0 right-0 hidden w-[36%] lg:block"
       >
-        {/* <HeroMeshCanvas /> goes here in Step 10 */}
+        <HeroMeshSlot />
       </div>
 
       <Reveal
