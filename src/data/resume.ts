@@ -46,6 +46,22 @@ export type Project = {
   stack: string[];
   description: string;
   client?: string;
+  /**
+   * Curated stack (≤6) shown in the Selected Builds mono line. When
+   * omitted, `stack` is used. Kept separate so the full stack from the
+   * resume stays intact in `stack` for later surfaces.
+   */
+  featuredStack?: string[];
+  /**
+   * Short editorial paragraph (~2 sentences). Third-person, describes
+   * the system, not the career. Grounded in MASTER_RESUME.md.
+   */
+  narrative?: string;
+  /**
+   * If true, surfaced in the Selected Builds section. Curation lives in
+   * the data layer; UI reads projects.filter(p => p.featured).
+   */
+  featured?: boolean;
 };
 
 export type SkillGroup = {
@@ -250,10 +266,26 @@ export const skills: SkillGroup[] = [
 
 export const projects: Project[] = [
   {
+    id: "velocity-engine",
+    title: "Velocity Engine for Intuit",
+    client: "Intuit",
+    stack: ["StackStorm", "MongoDB", "SSO"],
+    featuredStack: ["StackStorm", "MongoDB", "SSO"],
+    featured: true,
+    narrative:
+      "A custom StackStorm deployment inside Intuit, extended with a bespoke UI layer, role-based access controls, and MongoDB-backed state. Built as a platform for end-to-end workflow automation across internal operations — the shared substrate the automations themselves live on, not any one of them.",
+    description:
+      "A custom StackStorm deployment internally named Velocity Engine. SSO integration, a custom UI layer, MongoDB-backed controls, and end-to-end workflow automation for internal operations.",
+  },
+  {
     id: "petronas",
     title: "Cloud Infrastructure-as-Code Deployment for Petronas",
     client: "Petronas",
     stack: ["Terraform", "Helm", "HTML/CSS/JS", "YAML"],
+    featuredStack: ["Terraform", "Helm", "Kubernetes", "Azure", "YAML"],
+    featured: true,
+    narrative:
+      "An Infrastructure-as-Code framework on Azure for Petronas, with Terraform as the substrate and application delivery handled through Kubernetes and Helm. Built to be reusable — the scaffolding the rest of the engagement could lean on, not a one-off deploy.",
     description:
       "Led the design and deployment of a robust **Infrastructure-as-Code (IaC)** framework on Azure for Petronas, leveraging **Terraform** to provide secure, reusable cloud infrastructure. Enhanced deployment velocity and reliability by integrating **Kubernetes and Helm** for seamless application delivery at scale.",
   },
@@ -262,6 +294,15 @@ export const projects: Project[] = [
     title: "Automated SFTP-to-Azure Data Ingestion Pipeline for Inspiro",
     client: "Inspiro",
     stack: ["Terraform", "YAML", "Azure Data Factory"],
+    featuredStack: [
+      "Terraform",
+      "Azure Data Factory",
+      "Azure Blob Storage",
+      "YAML",
+    ],
+    featured: true,
+    narrative:
+      "An Azure Data Factory pipeline for Inspiro, ingesting files continuously from a secure SFTP endpoint into Azure Blob Storage. Provisioned through Terraform and wired into a CI/CD flow — the kind of pipeline that should run for years without being touched.",
     description:
       "Built a production-grade **Azure Data Factory** pipeline for Inspiro to continuously ingest files from a secure **SFTP server into Azure Blob Storage**. Focused on secure data transit, access control, and operational reliability within a **CI/CD-driven infrastructure**.",
   },
@@ -275,12 +316,22 @@ export const projects: Project[] = [
       "Terraform",
       "Azure Key Vault",
     ],
+    featuredStack: [
+      "Terraform",
+      "Azure Automation",
+      "Azure Key Vault",
+      "PowerShell",
+    ],
+    featured: true,
+    narrative:
+      "A policy-driven secret rotation loop for HDFC, running on Azure Automation against their Key Vaults. Everything provisioned through Terraform; the rotation itself scheduled and access-controlled, so the operation that used to be a calendar reminder became infrastructure.",
     description:
       "Delivered an automated solution for HDFC to rotate **Azure Key Vault secrets**, ensuring secure, policy-driven key updates and compliance. Provisioned all resources with **Terraform** and enabled scheduled, access-controlled secret management using **Azure Automation** — reducing manual efforts and boosting security for critical cloud workloads.",
   },
   {
     id: "finansier",
     title: "Finansier: Business Dashboard Web App",
+    featured: false,
     stack: [
       "ReactJs",
       "NextJs",
@@ -301,6 +352,7 @@ export const projects: Project[] = [
   {
     id: "absenteeism",
     title: "AI-Powered Absenteeism Predictor",
+    featured: false,
     stack: ["Python", "HTML", "CSS", "JS"],
     description:
       "Engineered a predictive absenteeism model using **AdaBoost, XGBoost, and Random Forest Regressor**, amalgamating HR analysis, surveys, and sentiment data. Employed advanced preprocessing to yield insights for reducing absenteeism, enhancing employee satisfaction, and refining HR strategies.",
@@ -308,6 +360,7 @@ export const projects: Project[] = [
   {
     id: "pixel-cloak",
     title: "Pixel Cloak: Steganography for Secure Communication",
+    featured: false,
     stack: ["Python", "HTML", "CSS", "JavaScript"],
     description:
       "Implemented secure communication protocols through **advanced encryption and hashing algorithms**. Strengthened defense mechanisms against potential security threats, encompassing **man-in-the-middle and passive attacks**.",
@@ -315,6 +368,7 @@ export const projects: Project[] = [
   {
     id: "real-estate",
     title: "Real Estate Price Predictor",
+    featured: false,
     stack: ["Python"],
     description:
       "Developed a predictive model for real estate pricing. Utilises specific housing features for price prediction. Employs **data analysis and predictive modelling techniques**. Aids in informed decision-making for buyers and sellers.",
@@ -322,6 +376,7 @@ export const projects: Project[] = [
   {
     id: "ogani",
     title: "OGANI — E-commerce for Farmers",
+    featured: false,
     stack: [
       "HTML",
       "CSS",
@@ -337,6 +392,7 @@ export const projects: Project[] = [
   {
     id: "python-minor",
     title: "Python Minor Projects",
+    featured: false,
     stack: ["Python", "SQL"],
     description:
       "Developed Python projects including a **Keylogger**, implementation of ciphers (**AES, DES, SHA-256, RSA**), and **password generator**, focusing on cybersecurity applications. Additionally created diverse projects like a **Hotel Management System, Voice Assistant**, and **Automation of Dino game**, showcasing versatility and technical proficiency.",
