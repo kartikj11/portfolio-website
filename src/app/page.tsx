@@ -2,6 +2,7 @@ import { BuildLog } from "@/components/sections/BuildLog";
 import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
 import { SelectedBuilds } from "@/components/sections/SelectedBuilds";
+import { ThenVsNow } from "@/components/sections/ThenVsNow";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <BuildLog />
       <SelectedBuilds />
       <Marquee />
+      <ThenVsNow />
     </>
   );
 }

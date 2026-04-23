@@ -162,7 +162,7 @@ export function Marquee() {
       <section
         id="stack"
         aria-labelledby="stack-heading"
-        className="relative pb-28 pt-6 sm:pb-32 sm:pt-8 lg:pb-40 lg:pt-12"
+        className="relative pb-16 pt-6 sm:pb-20 sm:pt-8 lg:pb-24 lg:pt-12"
       >
         <h2 id="stack-heading" className="sr-only">
           The Stack
@@ -200,7 +200,7 @@ export function Marquee() {
     <section
       id="stack"
       aria-labelledby="stack-heading"
-      className="relative pb-28 pt-6 sm:pb-32 sm:pt-8 lg:pb-40 lg:pt-12"
+      className="relative pb-16 pt-6 sm:pb-20 sm:pt-8 lg:pb-24 lg:pt-12"
     >
       <h2 id="stack-heading" className="sr-only">
         The Stack
