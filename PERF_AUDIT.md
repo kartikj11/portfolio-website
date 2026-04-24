@@ -265,4 +265,6 @@ If a future change drops mobile Performance below 90, revert or fix before mergi
 
 ## Remaining
 
-_Populated at end of pass._
+### `three` pinned to `~0.169.0`
+
+`@react-three/fiber@9.6.0` still instantiates `new THREE.Clock()` internally, which logs a `THREE.Clock: This module has been deprecated. Please use THREE.Timer instead` warning on `three@r170+`. Pinning `three` and `@types/three` to the 0.169.x line silences the warning without touching R3F. Unpin once R3F ships the Timer migration in a 9.x release — check `pnpm view @react-three/fiber` changelog for "Timer" mentions. Keep `three` and `@types/three` version-locked to the same minor.
