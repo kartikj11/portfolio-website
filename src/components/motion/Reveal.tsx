@@ -4,6 +4,7 @@ import {
   createContext,
   createElement,
   useContext,
+  useId,
   useMemo,
   useState,
   type CSSProperties,
@@ -78,9 +79,17 @@ type RevealItemProps = {
   children: ReactNode;
 };
 
+/**
+ * `assigned` memoizes index allocation by `useId()` value so the
+ * counter mutation inside RevealItem's `useState` initializer is
+ * idempotent. Without this, React 19 StrictMode dev double-invokes
+ * each initializer and the counter advances twice per item — SSR
+ * (run once) and client (run twice) end up disagreeing on the
+ * `--reveal-index` value, causing a hydration mismatch.
+ */
 type RevealContextValue =
   | { mode: "mount" }
-  | { mode: "inView"; counter: { n: number } }
+  | { mode: "inView"; counter: { n: number; assigned: Map<string, number> } }
   | null;
 
 const RevealContext = createContext<RevealContextValue>(null);
@@ -102,15 +111,18 @@ export function Reveal({
 
   // A per-instance counter object. `useState` with a function initializer
   // creates the object exactly once per Reveal instance; its identity is
-  // stable across re-renders. Each RevealItem reads and increments
-  // `counter.n` from its own `useState` initializer on mount to claim
-  // a sequential index, then holds that index in state forever.
+  // stable across re-renders. Each RevealItem claims a sequential index
+  // by passing its `useId()` to the counter; the `assigned` map keeps
+  // the lookup idempotent so StrictMode's double-invocation of the
+  // initializer doesn't double-advance `n`.
   //
   // Note: this is a plain object, NOT a useRef. The lint rules around
   // refs (react-hooks/refs, react-hooks/immutability) don't apply to
   // plain objects stored in useState, which is what lets this idiom
   // compile under React 19's stricter lint.
-  const [counter] = useState<{ n: number }>(() => ({ n: 0 }));
+  const [counter] = useState<{ n: number; assigned: Map<string, number> }>(
+    () => ({ n: 0, assigned: new Map() })
+  );
 
   const contextValue = useMemo<RevealContextValue>(
     () =>
@@ -158,14 +170,21 @@ export function RevealItem({
 }: RevealItemProps) {
   const ctx = useContext(RevealContext);
 
-  // Claim a stable index on first render. `useState` with a function
-  // initializer runs exactly once per component instance, so each item
-  // locks in its place in the parent's sequence on mount.
+  // `useId()` is stable across SSR and client renders for the same
+  // component instance — and stable across StrictMode's double-render
+  // of the initializer. We use it as a memoization key so the
+  // counter advance happens at most once per RevealItem regardless
+  // of how many times the initializer is invoked.
+  const itemId = useId();
+
   const [index] = useState<number>(() => {
     if (ctx && ctx.mode === "inView") {
+      const cached = ctx.counter.assigned.get(itemId);
+      if (cached !== undefined) return cached;
       const i = ctx.counter.n;
       // eslint-disable-next-line react-hooks/immutability
       ctx.counter.n = i + 1;
+      ctx.counter.assigned.set(itemId, i);
       return i;
     }
     return 0;
