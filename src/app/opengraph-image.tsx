@@ -1,6 +1,7 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const alt = "Kartik Jindal — DevOps / Cloud Infrastructure";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -8,34 +9,20 @@ export const contentType = "image/png";
 /**
  * Open Graph social card.
  *
- * The OG runtime is Edge, which doesn't have `next/font` resolution
- * available. Fetch Fraunces woff2 bytes directly at build time via the
- * Google Fonts CSS API — parse the @font-face src URL from the CSS
- * response, fetch the font binary, hand it to ImageResponse.
+ * Per the Next.js 16 `ImageResponse` docs, fonts must be `ttf` /
+ * `otf` / `woff` — `woff2` is unsupported. The Google Fonts CSS
+ * API serves `woff2` to modern user agents, which previously
+ * crashed the response with `Unsupported OpenType signature wOF2`.
+ * We now read the variable Fraunces TTF straight off disk via
+ * Node's `readFile`. Default Node runtime — no Edge needed.
  *
- * Design is intentionally text-only: accent-color pullquote on paper
- * background, mirroring the site's type-first aesthetic.
+ * Design is intentionally text-only: accent-color pullquote on
+ * paper background, mirroring the site's type-first aesthetic.
  */
-async function loadFraunces(): Promise<ArrayBuffer> {
-  const cssResponse = await fetch(
-    "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&display=swap",
-    {
-      headers: {
-        // Default UA gets woff format; Chrome UA gets woff2 (much smaller).
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      },
-    }
-  );
-  const css = await cssResponse.text();
-  const urlMatch = css.match(/url\((https:\/\/[^)]+\.woff2)\)/);
-  if (!urlMatch) throw new Error("Could not parse Fraunces woff2 URL");
-  const fontResponse = await fetch(urlMatch[1]);
-  return fontResponse.arrayBuffer();
-}
-
 export default async function OpenGraphImage() {
-  const fraunces = await loadFraunces();
+  const fraunces = await readFile(
+    join(process.cwd(), "assets/Fraunces.ttf")
+  );
 
   return new ImageResponse(
     (

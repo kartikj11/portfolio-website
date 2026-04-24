@@ -1,10 +1,20 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-export default function AppleIcon() {
+/**
+ * iOS home-screen icon — same italic-serif "K." wordmark as the
+ * browser favicon, scaled up. Reads Fraunces italic from disk
+ * (Satori only supports ttf/otf/woff, not woff2 — see icon.tsx).
+ */
+export default async function AppleIcon() {
+  const fraunces = await readFile(
+    join(process.cwd(), "assets/Fraunces-Italic.ttf")
+  );
+
   return new ImageResponse(
     (
       <div
@@ -15,16 +25,35 @@ export default function AppleIcon() {
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "#f5f1ea",
-          color: "#b83a25",
-          fontFamily: "serif",
-          fontSize: 120,
+          fontFamily: "Fraunces",
+          fontStyle: "italic",
           fontWeight: 500,
-          letterSpacing: "-0.02em",
         }}
       >
-        KJ
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            lineHeight: 1,
+            letterSpacing: "-0.04em",
+            fontSize: 168,
+          }}
+        >
+          <span style={{ color: "#131211" }}>K</span>
+          <span style={{ color: "#b83a25", marginLeft: -6 }}>.</span>
+        </div>
       </div>
     ),
-    size
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Fraunces",
+          data: fraunces,
+          style: "italic",
+          weight: 500,
+        },
+      ],
+    }
   );
 }
