@@ -120,8 +120,21 @@ export default function RootLayout({
           <StickyNav />
           <main className="flex-1">{children}</main>
         </LenisProvider>
-        <Analytics />
-        <SpeedInsights />
+        {/*
+          Vercel beacons only exist under `/_vercel/*` on the deployed
+          edge — local dev has no such route, so mounting these in dev
+          triggers 404s and "MIME type is not executable" errors as the
+          browser refuses to execute the dev-server HTML 404 page as JS.
+          Gating on NODE_ENV keeps dev console clean without the
+          `mode="production"` prop (which would send real beacons from
+          localhost and pollute the analytics dashboard).
+        */}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   );
